@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  sequelize.define('user', {
+  sequelize.define('User', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -11,14 +11,14 @@ module.exports = (sequelize) => {
     email: {
       allowNull: false,
       unique: true,
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       validate: {
         isEmail: true,
       },
     },
     password: {
       allowNull: false,
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
     },
   });
 };

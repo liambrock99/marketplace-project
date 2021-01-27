@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const userModel = require('./models/userModel');
 
@@ -10,6 +9,6 @@ sequelize.authenticate()
 
 userModel(sequelize);
 
-sequelize.sync({ force: true });
+// sequelize.sync({ force: true });
 
 module.exports = sequelize;
