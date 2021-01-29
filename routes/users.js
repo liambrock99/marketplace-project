@@ -22,7 +22,7 @@ async function register(req, res, next) {
       next(err);
     }
   } else {
-    res.status(400).json({ message: 'Missing field' });
+    res.status(400).json({ message: 'Missing field(s)' });
   }
 }
 
@@ -32,12 +32,10 @@ async function login(req, res, next) {
   if (email && password) {
     try {
       // Try to find user with email
-      const user = User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       if (user) {
         // Compare passwords
-        const hash = await argon2.hash(password);
-        const userHash = user.password;
-        if (hash === userHash) {
+        if (await argon2.verify(user.password, password)) {
           // Store uid in session
           console.log(`userid: ${user.id}`);
           req.session.id = user.id;
@@ -52,6 +50,8 @@ async function login(req, res, next) {
       console.log(err);
       next(err);
     }
+  } else {
+    res.status(400).json({ message: 'Misisng field(s)' });
   }
 }
 
