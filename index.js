@@ -3,7 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const morgan = require('morgan');
 const cors = require('cors');
-const { register, login } = require('./routes/users');
+const login = require('./routes/login');
+const register = require('./routes/register');
 
 const corsOptions = {
   origin: 'http://localhost:3000', // react app
@@ -15,18 +16,21 @@ app.use(morgan('dev'));
 app.use(cors(corsOptions));
 app.use(
   session({
+    name: 'sid',
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   }),
 );
+// Cookie defaults to { path: '/', httpOnly: true, secure: false, maxAge: null }
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json(req.session.id);
 });
 
-app.use('/register', register);
-app.use('/login', login);
+app.use(login);
+app.use(register);
 
-app.listen(5000, () => console.log('Listening on port 5000'));
+app.listen(process.env.PORT || 5000);
