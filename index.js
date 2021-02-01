@@ -8,6 +8,7 @@ const register = require('./routes/register');
 
 const corsOptions = {
   origin: 'http://localhost:3000', // react app
+  credentials: true, // sets Access-Control-Allow-Credentials
 };
 
 const app = express();
@@ -20,15 +21,17 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      secure: false,
+      sameSite: true,
+    },
   }),
 );
 // Cookie defaults to { path: '/', httpOnly: true, secure: false, maxAge: null }
 
 app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.json(req.session.id);
-});
 
 app.use(login);
 app.use(register);

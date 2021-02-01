@@ -16,7 +16,7 @@ async function login(req, res, next) {
     if (user) {
       // Compare the given password to the stored hash
       if (await argon2.verify(user.password, password)) {
-        req.session.id = user.id;
+        req.session.userId = user.id;
         return res.status(201).json({ message: 'OK' });
       }
       return res.status(400).json({ message: 'Incorrect password' });
