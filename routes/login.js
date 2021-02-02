@@ -1,10 +1,9 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
-const db = require('../sequelize');
+const { User } = require('../models');
 
 const router = express.Router();
-const { User } = db.models;
 
 // eslint-disable-next-line no-unused-vars
 async function login(req, res, next) {
@@ -24,7 +23,7 @@ async function login(req, res, next) {
     return res.status(400).json({ message: 'User not found' });
   }
 
-  return res.status(400).json({ message: 'Missing email and/or password' });
+  return res.status(400).json({ message: 'Missing fields' });
 }
 
 router.post('/login', asyncHandler(login));
