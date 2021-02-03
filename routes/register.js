@@ -1,30 +1,37 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
+const { body, validationResult } = require('express-validator');
 const { User } = require('../models');
 
 const router = express.Router();
 
 // eslint-disable-next-line no-unused-vars
 async function register(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password, username } = req.body;
 
-  if (email && password && username) {
-    const count = await User.count({ where: { email } });
-
-    // If count is 0 the user is not registered yet
-    if (count === 0) {
-      const hash = await argon2.hash(password);
-      User.create({ email, password: hash, username });
-      return res.status(201).json({ message: 'OK' });
-    }
-
+  // Check if a user with the given email already exists
+  if (await User.count({ where: { email } }) > 0) {
     return res.status(400).json({ message: 'User already exists' });
   }
 
-  return res.status(400).json({ message: 'Missing fields' });
+  // Hash password and create user
+  const passwordHash = await argon2.hash(password);
+  await User.create({ email, password: passwordHash, username });
+  return res.status(201).json({ message: 'OK' });
 }
 
-router.post('/register', asyncHandler(register));
+router.post(
+  '/register',
+  body('email').isEmail().normalizeEmail(),
+  body('password').not().isEmpty().escape(),
+  body('username').not().isEmpty().escape(),
+  asyncHandler(register),
+);
 
 module.exports = router;
