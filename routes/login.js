@@ -10,7 +10,7 @@ const router = express.Router();
 async function login(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(401).json({ errors: errors.array() });
   }
 
   const { email, password } = req.body;
@@ -18,17 +18,17 @@ async function login(req, res, next) {
   // Find a user with the given email
   const user = await User.findOne({ where: { email } });
   if (user === null) {
-    return res.status(400).json({ message: 'No user found' });
+    return res.status(401).json({ message: 'No user found' });
   }
 
   // Verify password
   if (!await argon2.verify(user.password, password)) {
-    return res.status(400).json({ message: 'password inavlid' });
+    return res.status(401).json({ message: 'password inavlid' });
   }
 
   // Start a new session
-  req.session.user = user.id;
-  return res.status(201).json({ message: 'OK' });
+  req.session.userId = user.id;
+  return res.status(200).json({ message: 'OK' });
 }
 
 router.post(

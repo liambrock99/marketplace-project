@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const login = require('./routes/login');
 const register = require('./routes/register');
+const listings = require('./routes/listings');
 
 const corsOptions = {
   origin: 'http://localhost:3000', // react app
@@ -21,8 +22,8 @@ const sessionOptions = {
     httpOnly: true,
     secure: false,
     sameSite: true,
-  }
-}
+  },
+};
 
 const app = express();
 
@@ -32,4 +33,5 @@ app.use(session(sessionOptions));
 app.use(express.json());
 app.use(login);
 app.use(register);
+app.use(listings);
 app.listen(process.env.PORT || 5000);
