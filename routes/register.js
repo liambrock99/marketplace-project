@@ -1,18 +1,13 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const { User } = require('../models');
+const { checkValidationResult } = require('../middleware');
 
 const router = express.Router();
 
-// eslint-disable-next-line no-unused-vars
-async function register(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
+async function register(req, res) {
   const { email, password, username } = req.body;
 
   // Check if a user with the given email already exists
@@ -29,8 +24,11 @@ async function register(req, res, next) {
 router.post(
   '/register',
   body('email').isEmail().normalizeEmail(),
-  body('password').not().isEmpty().escape(),
-  body('username').not().isEmpty().escape(),
+  body('password').not().isEmpty().trim()
+    .escape(),
+  body('username').not().isEmpty().trim()
+    .escape(),
+  checkValidationResult,
   asyncHandler(register),
 );
 

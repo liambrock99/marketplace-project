@@ -1,18 +1,13 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const { User } = require('../models');
+const { checkValidationResult } = require('../middleware');
 
 const router = express.Router();
 
-// eslint-disable-next-line no-unused-vars
-async function login(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
-  }
-
+async function login(req, res) {
   const { email, password } = req.body;
 
   // Find a user with the given email
@@ -34,7 +29,9 @@ async function login(req, res, next) {
 router.post(
   '/login',
   body('email').isEmail().normalizeEmail(),
-  body('password').not().isEmpty().escape(),
+  body('password').not().isEmpty().trim()
+    .escape(),
+  checkValidationResult,
   asyncHandler(login),
 );
 
