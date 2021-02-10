@@ -2,7 +2,7 @@ const express = require('express');
 const asyncHandler = require('express-async-handler');
 const { body } = require('express-validator');
 const { isAuthenticated, checkValidationResult } = require('../middleware');
-const { User } = require('../models');
+const { User, Listing } = require('../models');
 
 const router = express.Router();
 
@@ -30,6 +30,27 @@ async function create(req, res) {
   });
 
   return res.status(201).json({ message: 'OK' });
+}
+
+async function ddelete(req, res) {
+  // Get listing id from body
+  const { id } = req.body;
+  const { userId } = req.session;
+
+  if (!id) return res.status(401).json({ message: 'Missing id' });
+
+  const listing = await Listing.findByPk(id);
+  if (!listing) {
+    return res.status(400).json({ message: 'Listing does not exist' });
+  }
+
+  // Make sure the user owns the listing to delete
+  if (listing.UserId !== userId) {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
+
+  await listing.destroy();
+  return res.status(200).json({ message: 'OK' });
 }
 
 // Return all listings for the given user
@@ -65,6 +86,12 @@ router.get(
   '/listings/all',
   isAuthenticated,
   asyncHandler(all),
+);
+
+router.post(
+  '/listings/delete',
+  isAuthenticated,
+  asyncHandler(ddelete),
 );
 
 module.exports = router;

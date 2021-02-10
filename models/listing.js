@@ -39,7 +39,11 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       },
       type: DataTypes.INTEGER,
-    }
+    },
+    price: {
+      allowNull: false,
+      type: DataTypes.FLOAT
+    },
   }, {
     sequelize,
     modelName: 'Listing',
