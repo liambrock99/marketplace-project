@@ -1,7 +1,7 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
-const { body } = require('express-validator');
-const { isAuthenticated, checkValidationResult } = require('../middleware');
+const { isAuthenticated, validateSchema } = require('../middleware');
+const { listingSchema, idSchema } = require('../schemas');
 const { User, Listing } = require('../models');
 
 const router = express.Router();
@@ -11,10 +11,10 @@ async function create(req, res) {
     title,
     description,
     category,
-    price, // convert to float at somepoint
+    price,
   } = req.body;
 
-  // Get user from session
+  // Get user by id
   const { userId } = req.session;
   const user = await User.findByPk(userId);
   if (!user) {
@@ -33,18 +33,16 @@ async function create(req, res) {
 }
 
 async function ddelete(req, res) {
-  // Get listing id from body
-  const { id } = req.body;
+  const { listingId } = req.body;
   const { userId } = req.session;
 
-  if (!id) return res.status(401).json({ message: 'Missing id' });
-
-  const listing = await Listing.findByPk(id);
+  // Get listing by id
+  const listing = await Listing.findByPk(listingId);
   if (!listing) {
     return res.status(400).json({ message: 'Listing does not exist' });
   }
 
-  // Make sure the user owns the listing to delete
+  // Ensure user is authorized to delete
   if (listing.UserId !== userId) {
     return res.status(403).json({ message: 'Unauthorized' });
   }
@@ -57,7 +55,7 @@ async function ddelete(req, res) {
 async function all(req, res) {
   const { userId } = req.session;
 
-  // Get user from session
+  // Get user by id
   const user = await User.findByPk(userId);
   if (!user) {
     return res.status(400).json({ message: 'User not found' });
@@ -71,26 +69,21 @@ async function all(req, res) {
 router.post(
   '/listings/create',
   isAuthenticated,
-  body('title').not().isEmpty().trim()
-    .escape(),
-  body('description').not().isEmpty().trim()
-    .escape(),
-  body('category').not().isEmpty().trim()
-    .escape(),
-  body('price').isFloat({ min: 0.00 }),
-  checkValidationResult,
+  validateSchema(listingSchema),
   asyncHandler(create),
 );
 
 router.get(
   '/listings/all',
   isAuthenticated,
+  validateSchema(idSchema),
   asyncHandler(all),
 );
 
 router.post(
   '/listings/delete',
   isAuthenticated,
+  validateSchema(idSchema),
   asyncHandler(ddelete),
 );
 

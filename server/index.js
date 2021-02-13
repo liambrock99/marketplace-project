@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const login = require('./routes/login');
 const register = require('./routes/register');
-const listings = require('./routes/listings');
+const listings = require('./routes/listing');
 
 const corsOptions = {
   origin: 'http://localhost:3000', // react app

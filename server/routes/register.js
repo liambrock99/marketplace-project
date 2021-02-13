@@ -1,9 +1,9 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
-const { body } = require('express-validator');
 const { User } = require('../models');
-const { checkValidationResult } = require('../middleware');
+const { registerSchema } = require('../schemas');
+const { validateSchema } = require('../middleware');
 
 const router = express.Router();
 
@@ -23,12 +23,7 @@ async function register(req, res) {
 
 router.post(
   '/register',
-  body('email').isEmail().normalizeEmail(),
-  body('password').not().isEmpty().trim()
-    .escape(),
-  body('username').not().isEmpty().trim()
-    .escape(),
-  checkValidationResult,
+  validateSchema(registerSchema),
   asyncHandler(register),
 );
 
