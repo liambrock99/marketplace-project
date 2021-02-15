@@ -76,7 +76,6 @@ router.post(
 router.get(
   '/listings/all',
   isAuthenticated,
-  validateSchema(idSchema),
   asyncHandler(all),
 );
 

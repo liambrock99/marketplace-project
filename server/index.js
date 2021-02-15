@@ -4,7 +4,7 @@ const session = require('express-session');
 const morgan = require('morgan');
 const cors = require('cors');
 const login = require('./routes/login');
-const register = require('./routes/register');
+const signup = require('./routes/signup');
 const listings = require('./routes/listing');
 
 const corsOptions = {
@@ -32,6 +32,6 @@ app.use(cors(corsOptions));
 app.use(session(sessionOptions));
 app.use(express.json());
 app.use(login);
-app.use(register);
+app.use(signup);
 app.use(listings);
 app.listen(process.env.PORT || 5000);

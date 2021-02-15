@@ -22,11 +22,11 @@ const loginSchema = Joi.object({
     .required(),
 });
 
-const registerSchema = Joi.object({
-  username: Joi.string()
-    .alphanum()
-    .min(4)
-    .max(10)
+// TODO
+const signupSchema = Joi.object({
+  firstName: Joi.string()
+    .required(),
+  lastName: Joi.string()
     .required(),
 }).concat(loginSchema);
 
@@ -66,7 +66,7 @@ function validateSchema(schema) {
 
 module.exports = {
   loginSchema,
-  registerSchema,
+  signupSchema,
   listingSchema,
   idSchema,
   validateSchema,
