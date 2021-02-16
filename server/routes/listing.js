@@ -67,20 +67,20 @@ async function all(req, res) {
 }
 
 router.post(
-  '/listings/create',
+  '/listing/create',
   isAuthenticated,
   validateSchema(listingSchema),
   asyncHandler(create),
 );
 
 router.get(
-  '/listings/all',
+  '/listing/all',
   isAuthenticated,
   asyncHandler(all),
 );
 
 router.post(
-  '/listings/delete',
+  '/listing/delete',
   isAuthenticated,
   validateSchema(idSchema),
   asyncHandler(ddelete),
