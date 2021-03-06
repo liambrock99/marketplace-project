@@ -2,8 +2,6 @@ const express = require('express');
 const asyncHandler = require('express-async-handler');
 const argon2 = require('argon2');
 const { User } = require('../models');
-const { loginSchema } = require('../schemas');
-const { validateSchema } = require('../middleware');
 
 const router = express.Router();
 
@@ -28,7 +26,6 @@ async function login(req, res) {
 
 router.post(
   '/login',
-  validateSchema(loginSchema),
   asyncHandler(login),
 );
 

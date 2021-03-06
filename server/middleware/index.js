@@ -1,28 +1,24 @@
-// Exits early if the user is not authenticated.
-// A user is authenticated if userId exists in req.session
+const { User } = require('../models');
+
+// Checks if the user is authenticated.
+// A user is authenticated if session.userId exists.
 function isAuthenticated(req, res, next) {
-  const { userId } = req.session;
-  if (!userId) {
-    return res.status(400).json({ message: 'Not logged in' });
-  }
+  if (!req.session.userId) return res.status(400).json({ message: 'Not authenticated' });
   return next();
 }
 
-// Returns a middleware that validates a given Joi schema using validateAsync()
-// Exits early if validateAsync rejects with errors
-function validateSchema(schema) {
-  return async (req, res, next) => {
-    try {
-      const value = await schema.validateAsync(req.body);
-      req.body = value;
-      return next();
-    } catch (err) {
-      return res.status(400).json(err);
-    }
-  };
+// Fetches the user from the database and attaches the user instance to the request object.
+// This should be called after isAuthenticated.
+async function deserializeUser(req, res, next) {
+  const user = await User.findByPk(req.session.userId);
+  if (!user) {
+    return res.status(400).json({ message: 'User does not exist' });
+  }
+  req.user = user;
+  return next();
 }
 
 module.exports = {
   isAuthenticated,
-  validateSchema,
+  deserializeUser,
 };

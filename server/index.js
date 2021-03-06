@@ -7,10 +7,10 @@ const login = require('./routes/login');
 const signup = require('./routes/signup');
 const listings = require('./routes/listing');
 
-// const corsOptions = {
-//   origin: 'http://localhost:3000', // react app
-//   credentials: true, // sets Access-Control-Allow-Credentials
-// };
+const corsOptions = {
+  origin: 'http://localhost:3000', // react app
+  credentials: true, // sets Access-Control-Allow-Credentials
+};
 
 const sessionOptions = {
   name: 'sid',
@@ -28,7 +28,7 @@ const sessionOptions = {
 const app = express();
 
 app.use(morgan('dev'));
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(session(sessionOptions));
 app.use(express.json());
 app.use(login);
