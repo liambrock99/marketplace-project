@@ -40,7 +40,7 @@ export default function LoginForm() {
         }
       }}
     >
-      <Form className='form'>
+      <Form>
         <h1>Login</h1>
         <Field 
           name='email' 
@@ -50,7 +50,6 @@ export default function LoginForm() {
         <ErrorMessage 
           name='email'
           component='div' 
-          className='form-error' 
         />
         <Field 
           name='password' 
@@ -60,7 +59,6 @@ export default function LoginForm() {
         <ErrorMessage 
           name='password'
           component='div'
-          className='form-error'
         />
         <button type='submit'>Submit</button>
         {error ? <div>{error.message}</div> : null}
