@@ -3,9 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const morgan = require('morgan');
 const cors = require('cors');
-const login = require('./routes/login');
-const signup = require('./routes/signup');
-const listings = require('./routes/listing');
+const usersRouter = require('./routes/users');
+const listingsRouter = require('./routes/listings');
 
 const corsOptions = {
   origin: 'http://localhost:3000', // react app
@@ -31,7 +30,7 @@ app.use(morgan('dev'));
 app.use(cors(corsOptions));
 app.use(session(sessionOptions));
 app.use(express.json());
-app.use(login);
-app.use(signup);
-app.use(listings);
+app.use(express.urlencoded({ extended: true }));
+app.use('/users', usersRouter);
+app.use('/listings', listingsRouter);
 app.listen(process.env.PORT || 5000);

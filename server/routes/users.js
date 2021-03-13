@@ -5,7 +5,7 @@ const { User } = require('../models');
 
 const router = express.Router();
 
-async function login(req, res) {
+router.post('/login', asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // Find a user with the given email
@@ -19,14 +19,33 @@ async function login(req, res) {
     return res.status(401).json({ message: 'password inavlid' });
   }
 
-  // Start a new session
+  // Create new session
   req.session.userId = user.id;
   return res.status(200).json({ message: 'OK' });
-}
+}));
 
-router.post(
-  '/login',
-  asyncHandler(login),
-);
+router.post('/signup', asyncHandler(async (req, res) => {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+  } = req.body;
+
+  // Check if a user with the given email already exists
+  if (await User.count({ where: { email } }) > 0) {
+    return res.status(400).json({ message: 'User already exists' });
+  }
+
+  // Hash password and create user
+  const passwordHash = await argon2.hash(password);
+  await User.create({
+    email,
+    password: passwordHash,
+    firstName,
+    lastName,
+  });
+  return res.status(201).json({ message: 'OK' });
+}));
 
 module.exports = router;
