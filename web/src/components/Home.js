@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { Formik, Form } from 'formik';
-import ListingGrid from './ListingGrid'
+import HomeGallery from './HomeGallery'
 
-const Header = styled.div`
+const Header = styled.header`
   width: 100%;
   background-color: #0065ff;
-  height: 250px;
-  padding: 100px 0 100px 0;
+  max-height: 750px;
+  padding: 120px 50px;
+  box-sizing: border-box;
 `
-
 const Title = styled.h1`
   font-size: 3rem;
   color: white;
@@ -46,13 +46,13 @@ function Home() {
             console.log(values);
           }}
         >
-          <Form>
+          <Form style={{textAlign: "center"}}>
             <StyledField name='query' type='text'/>
             <StyledButton type='submit'>Search</StyledButton>
           </Form>
         </Formik>
       </Header>
-      <ListingGrid/>
+      <HomeGallery/>
     </>
   );
 }
