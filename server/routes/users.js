@@ -21,7 +21,7 @@ router.post('/login', asyncHandler(async (req, res) => {
 
   // Create new session
   req.session.userId = user.id;
-  return res.status(200).json({ message: 'OK' });
+  return res.status(200).json({ firstName: user.firstName });
 }));
 
 router.post('/signup', asyncHandler(async (req, res) => {
