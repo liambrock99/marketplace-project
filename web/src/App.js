@@ -6,13 +6,14 @@ import {
 } from "react-router-dom";
 import { ThemeProvider } from 'styled-components';
 import { theme } from './theme';
-import Home from "./components/Home";
-import LoginPage from"./components/LoginPage";
+import Home from './components/Home';
+import LoginPage from './components/LoginPage';
+import SignupPage from './components/SignupPage';
 
 export const UserContext = React.createContext({ 
   loggedIn: false, 
   toggleLoggedIn: () => {}
-})
+});
 
 export default function App() {
 
@@ -24,13 +25,13 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path="/login">
+            <Route path='/login'>
               <LoginPage/>
             </Route>
-            <Route path="/signup">
-              <div>Hi signup</div>
+            <Route path='/signup'>
+              <SignupPage/>
             </Route>
-            <Route path="/">
+            <Route path='/'>
               <Home/>
             </Route>
           </Switch>

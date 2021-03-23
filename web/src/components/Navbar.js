@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../App';
 
 const StyledNav = styled.nav`
-  background-color: white;
+  border-bottom: 1px solid ${props => props.theme.grey};
+  background-color: ${props => props.theme.lightGrey};
+
   ul {
     margin: 0;
     padding: 0;
@@ -12,10 +14,11 @@ const StyledNav = styled.nav`
     display: flex;
     flex-wrap: wrap;
   }
+
   ul li {
     padding: 20px;
     :hover {
-      background-color:  ${props => props.theme.lightGrey};
+      background-color:  ${props => props.theme.grey};
     }
   }
 `
@@ -23,6 +26,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   font-weight: bold;
   color: ${props => props.theme.blue};
+  
   :hover {
     color: ${props => props.theme.blueAccent};
   }
