@@ -6,7 +6,8 @@ export const VerticalForm = styled(Form)`
   left: 50%;
   top: 100px;
   transform: translateX(-50%);
-  width: 400px;
+  max-width: 400px;
+  min-width: 350px;
   padding: 50px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
   border-radius: 10px;

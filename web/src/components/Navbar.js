@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../App';
+import { useAuth } from '../useAuth';
 
 const StyledNav = styled.nav`
   border-bottom: 1px solid ${props => props.theme.grey};
@@ -34,7 +33,7 @@ const StyledLink = styled(Link)`
 
 export default function Navbar() {
 
-  const { loggedIn } = useContext(UserContext);
+  const { user } = useAuth();
 
   return (
     <StyledNav>
@@ -42,15 +41,17 @@ export default function Navbar() {
         <li>
           <StyledLink to="/">Home</StyledLink>
         </li>
-        { loggedIn ? null :
-          <>
-            <li>
-              <StyledLink to="/login">Log in</StyledLink>
-            </li>
-            <li>
-              <StyledLink to="/signup">Sign up</StyledLink>
-            </li>
-          </>
+        { user ? <div>{user.email}</div> :
+          (
+            <>
+              <li>
+                <StyledLink to="/login">Log in</StyledLink>
+              </li>
+              <li>
+                <StyledLink to="/signup">Sign up</StyledLink>
+              </li>
+            </>
+          )
         }
       </ul>
     </StyledNav>

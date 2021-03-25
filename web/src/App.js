@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,19 +9,11 @@ import { theme } from './theme';
 import Home from './components/Home';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
-
-export const UserContext = React.createContext({ 
-  loggedIn: false, 
-  toggleLoggedIn: () => {}
-});
+import { ProvideAuth } from './useAuth';
 
 export default function App() {
-
-  const [loggedIn, setLoggedIn] = useState(false);
-  const toggleLoggedIn = () => setLoggedIn(loggedIn ? false : true);
-
   return (
-    <UserContext.Provider value={{ loggedIn, toggleLoggedIn }}>
+    <ProvideAuth>
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
@@ -37,6 +29,6 @@ export default function App() {
           </Switch>
         </Router>
       </ThemeProvider>
-    </UserContext.Provider>
+    </ProvideAuth>
   );
 }
