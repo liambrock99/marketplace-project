@@ -1,7 +1,8 @@
 const argon2 = require('argon2');
+const ApiError = require('../error/ApiError');
 const { User } = require('../models');
 
-async function signup(req, res) {
+async function signup(req, res, next) {
   const {
     email,
     password,
@@ -11,14 +12,14 @@ async function signup(req, res) {
 
   // Check if a user with the given email already exists
   if (await User.count({ where: { email } }) > 0) {
-    return res.status(400).json({ message: 'User already exists' });
+    return next(ApiError.badRequest('Email unavailable'));
   }
 
   // Hash password and create user
-  const passwordHash = await argon2.hash(password);
+  const hash = await argon2.hash(password);
   await User.create({
     email,
-    password: passwordHash,
+    password: hash,
     firstName,
     lastName,
   });

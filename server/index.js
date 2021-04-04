@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const morgan = require('morgan');
 const cors = require('cors');
+const handleApiError = require('./error/handleApiError');
 const routes = require('./routes');
 
 const corsOptions = {
@@ -31,4 +32,6 @@ app.use(session(sessionOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', routes);
+app.use(handleApiError);
+
 app.listen(process.env.PORT || 5000);

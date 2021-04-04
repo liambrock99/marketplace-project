@@ -29,10 +29,6 @@ module.exports = {
         allowNull: true,
         type: Sequelize.FLOAT,
       },
-      free: {
-        allowNull: true,
-        type: Sequelize.BOOLEAN,
-      },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
